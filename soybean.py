@@ -10,15 +10,15 @@ import pandas as pd
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 from sklearn.model_selection import train_test_split
 
-
 #%%
 # Load Dataset
-CLASS_COLUMNS = ["species_Adelie", "species_Chinstrap", "species_Gentoo"]
-# CLASS_COLUMNS = "species"
-dataset = pd.read_csv("dataset/palmerpenguins/penguins.csv", na_values="NA").dropna()
+CLASS_COLUMNS = []
+
+dataset = pd.read_csv("dataset/soybean/data.csv").dropna()
 
 # Creating one hot encoding
-dataset = pd.get_dummies(dataset, columns=["species", "island", "sex"] ,dtype=float)
+dataset = pd.get_dummies(dataset, columns=["Cultivar"], dtype=float)
+CLASS_COLUMNS = [column for column in dataset.columns if column.startswith("Cultivar_")]
 
 # Separating splits and X and y
 train, test = train_test_split(dataset, train_size=0.7, shuffle=True)
@@ -29,13 +29,13 @@ X_train = train.drop(columns=CLASS_COLUMNS)
 y_test = test[CLASS_COLUMNS]
 X_test = test.drop(columns=CLASS_COLUMNS)
 
-
 #%%
 # Create Model
 model = tf.keras.Sequential([
     Flatten(input_shape=(len(X_train.columns),)),
-    Dense(32, activation='sigmoid'),
-    Dense(16, activation='sigmoid'),
+    Dense(80, activation='sigmoid'),
+    Dense(40, activation='sigmoid'),
+    Dense(20, activation='sigmoid'),
     Dense(len(y_train.columns) if type(y_train)!=pd.Series else len(y_train), activation='softmax'),
 ])
 
@@ -60,7 +60,7 @@ def proba_to_onehot(proba_list):
 
 preds = [proba_to_onehot(item) for item in preds]
 
-print(preds)
+# print(preds)
 
 acc = accuracy_score(y_test, preds)
 prec, rec, f1, _ = precision_recall_fscore_support(y_test, preds, average="macro")

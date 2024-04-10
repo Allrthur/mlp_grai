@@ -10,15 +10,14 @@ import pandas as pd
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 from sklearn.model_selection import train_test_split
 
-
 #%%
 # Load Dataset
-CLASS_COLUMNS = ["species_Adelie", "species_Chinstrap", "species_Gentoo"]
-# CLASS_COLUMNS = "species"
-dataset = pd.read_csv("dataset/palmerpenguins/penguins.csv", na_values="NA").dropna()
+CLASS_COLUMNS = ["origin_1", "origin_2", "origin_3"]
+dataset = pd.read_csv("dataset/wine/wine.csv").dropna()
+dataset["origin"] = dataset["origin"].astype(object)
 
 # Creating one hot encoding
-dataset = pd.get_dummies(dataset, columns=["species", "island", "sex"] ,dtype=float)
+dataset = pd.get_dummies(dataset, columns=["origin"], dtype=float)
 
 # Separating splits and X and y
 train, test = train_test_split(dataset, train_size=0.7, shuffle=True)
@@ -28,7 +27,6 @@ X_train = train.drop(columns=CLASS_COLUMNS)
 
 y_test = test[CLASS_COLUMNS]
 X_test = test.drop(columns=CLASS_COLUMNS)
-
 
 #%%
 # Create Model
