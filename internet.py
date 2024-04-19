@@ -1,8 +1,8 @@
 #%%
 import tensorflow as tf
 import pandas as pd
-from tensorflow.keras.layers import Flatten, Dense, Softmax
-from tensorflow.keras.optimizers import SGD, Adam
+from keras.layers import Flatten, Dense, Softmax
+from keras.optimizers import SGD, Adam
 from keras.models import Model
 
 import pandas as pd
@@ -75,13 +75,15 @@ print("rec:\t", rec)
 print("f1:\t", f1)
 
 # printing results into file
-if not os.path.exists("results/internet.txt"):
+FILE_PATH = "results/internet.txt"
+
+if not os.path.exists(FILE_PATH):
     print("creating results file")
-    with open("results/soybean.txt", mode="w") as file: file.write("experiment,acc,prec,rec,f1\n")
+    with open(FILE_PATH, mode="w") as file: file.write("experiment,acc,prec,rec,f1\n")
 
 last_experiment_idx = 1
-with open("results/internet.txt", mode='r') as file: 
+with open(FILE_PATH, mode='r') as file: 
     last_experiment_idx = len(file.readlines())
 
-with open("results/internet.txt", mode='a') as file:
+with open(FILE_PATH, mode='a') as file:
     file.write(f"{last_experiment_idx},{acc},{prec},{rec},{f1}\n")

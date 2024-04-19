@@ -1,8 +1,8 @@
 #%%
 import tensorflow as tf
 import pandas as pd
-from tensorflow.keras.layers import Flatten, Dense, Softmax
-from tensorflow.keras.optimizers import SGD, Adam
+from keras.layers import Flatten, Dense, Softmax
+from keras.optimizers import SGD, Adam
 from keras.models import Model
 
 import pandas as pd
@@ -71,7 +71,7 @@ preds = [proba_to_onehot(item) for item in preds]
 # print(preds)
 
 acc = accuracy_score(y_test, preds)
-prec, rec, f1, _ = precision_recall_fscore_support(y_test, preds, average="macro")
+prec, rec, f1, _ = precision_recall_fscore_support(y_test, preds, average="macro", zero_division=0)
 
 print("acc:\t", acc)
 print("prec:\t", prec)
@@ -79,13 +79,15 @@ print("rec:\t", rec)
 print("f1:\t", f1)
 
 # printing results into file
-if not os.path.exists("results/soybean.txt"):
+FILE_PATH = "results/soybean.txt"
+
+if not os.path.exists(FILE_PATH):
     print("creating results file")
-    with open("results/soybean.txt", mode="w") as file: file.write("experiment,acc,prec,rec,f1\n")
+    with open(FILE_PATH, mode="w") as file: file.write("experiment,acc,prec,rec,f1\n")
 
 last_experiment_idx = 1
-with open("results/soybean.txt", mode='r') as file: 
+with open(FILE_PATH, mode='r') as file: 
     last_experiment_idx = len(file.readlines())
 
-with open("results/soybean.txt", mode='a') as file:
+with open(FILE_PATH, mode='a') as file:
     file.write(f"{last_experiment_idx},{acc},{prec},{rec},{f1}\n")
