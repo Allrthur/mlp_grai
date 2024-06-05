@@ -41,9 +41,9 @@ X_train_oversampled, y_train_oversampled = oversampler.fit_resample(X_train.to_n
 # Create Model
 model = tf.keras.Sequential([
     Flatten(input_shape=(len(X_train.columns),)),
-    Dense(80, activation='sigmoid'),
-    Dense(40, activation='sigmoid'),
-    Dense(20, activation='sigmoid'),
+    Dense(len(X_train.columns)*4, activation='sigmoid'),
+    Dense(len(X_train.columns)*2, activation='sigmoid'),
+    Dense(len(X_train.columns), activation='sigmoid'),
     Dense(len(y_train.columns) if type(y_train)!=pd.Series else len(y_train), activation='softmax'),
 ])
 
